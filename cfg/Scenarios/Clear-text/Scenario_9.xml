@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+
+<linkage_config>
+
+	<DatabaseSourceA>
+		<database>pprl</database>
+		<table>TblSourceA_4000</table>
+		<url>jdbc:mysql://140.226.132.40:3306/</url>
+		<user>ongt</user>
+		<password>toor3</password>
+	</DatabaseSourceA>
+
+	<DatabaseSourceB>
+		<database>pprl</database>
+		<table>TblSourceB_5000</table>
+		<url>jdbc:mysql://140.226.132.40:3306/</url>
+		<user>ongt</user>
+		<password>toor3</password>
+	</DatabaseSourceB>
+
+	<LinkageConfig>
+		<acceptancelevel>70</acceptancelevel>
+		<weightidenfifier>EM</weightidenfifier>
+		<joinmethod>NESTED_LOOP_JOIN</joinmethod>
+	</LinkageConfig>
+
+	
+	<DatabaseMap>
+		
+		<MappedPair attr="SSN" algorithm="EDIT_DISTANCE" weight="0.3">
+			<read_col>ssn</read_col>
+			<write_col>SocialSecurityNo</write_col>
+		</MappedPair>
+		<MappedPair attr="LastName" algorithm="EDIT_DISTANCE" weight="0.25">
+			<read_col>ln</read_col>
+			<write_col>LastName</write_col>
+		</MappedPair>
+		<MappedPair attr="FirstName" algorithm="EDIT_DISTANCE" weight="0.25">
+			<read_col>fn</read_col>
+			<write_col>FirstName</write_col>
+		</MappedPair>
+		<MappedPair attr="zip" algorithm="EQUAL_FIELDS_BOOLEAN_DISTANCE" weight="0.2">
+			<read_col>zip</read_col>
+			<write_col>ZipCode</write_col>
+		</MappedPair>
+
+	</DatabaseMap>
+
+	<EMBlocking>	
+		<read_col>zip</read_col>
+		<write_col>ZipCode</write_col>
+	</EMBlocking>
+
+	
+</linkage_config>

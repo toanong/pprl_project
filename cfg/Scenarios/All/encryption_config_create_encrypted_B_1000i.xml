@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+
+<encryption_config>
+
+	<DatabaseReaderConnection>
+		<database>pprl</database>
+		<table>TblSourceB_1000i</table>
+		<url>jdbc:mysql://140.226.132.40:3306/</url>
+		<user>ongt</user>
+		<password>toor3</password>
+	</DatabaseReaderConnection>
+
+	<DatabaseWriterConnection>
+		<database>pprl</database>
+		<table>TblSourceB_1000i_encrypted</table>
+		<url>jdbc:mysql://140.226.132.40:3306/</url>
+		<user>ongt</user>
+		<password>toor3</password>
+	</DatabaseWriterConnection>
+
+	<DatabaseMap>
+		<MappedPair attr="SSN">
+			<read_col>SocialSecurityNo</read_col>
+			<write_col>SSN</write_col>
+		</MappedPair>
+
+		<MappedPair attr="FN">
+			<read_col>FirstName</read_col>
+			<write_col>FIRSTNAME</write_col>	
+		</MappedPair>
+
+		<MappedPair attr="LN">
+			<read_col>LastName</read_col>
+			<write_col>LASTNAME</write_col>	
+		</MappedPair>
+		
+		
+		<MappedPair attr="ZIP">
+			<read_col>ZipCode</read_col>
+			<write_col>ZIP</write_col>	
+		</MappedPair>
+		<MappedPair attr="SSN_pk" clear-text="yes">
+			<read_col>ssn_pk</read_col>
+			<write_col>ssn_pk</write_col>
+		</MappedPair>
+
+	</DatabaseMap>
+
+	<Blocking>
+		<read_col>bdate</read_col>
+		<write_col>DOBHASH</write_col>
+	</Blocking>
+
+</encryption_config>
+
+
+

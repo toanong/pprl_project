@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+
+<linkage_config>
+
+	<DatabaseSourceA>
+		<database>pprl</database>
+		<table>TblSourceA_2000i_missing</table>
+		<url>jdbc:mysql://140.226.132.40:3306/</url>
+		<user>ongt</user>
+		<password>toor3</password>
+	</DatabaseSourceA>
+
+	<DatabaseSourceB>
+		<database>pprl</database>
+		<table>TblSourceB_2000i_missing</table>
+		<url>jdbc:mysql://140.226.132.40:3306/</url>
+		<user>ongt</user>
+		<password>toor3</password>
+	</DatabaseSourceB>
+
+	<DatabaseSaver>
+		<database>pprl</database>
+		<url>jdbc:mysql://140.226.132.40:3306/</url>
+		<user>ongt</user>
+		<password>toor3</password>
+	</DatabaseSaver>
+
+	<LinkageConfig>
+		<acceptancelevel>50</acceptancelevel>
+		<weightidenfifier>EM</weightidenfifier>
+		<joinmethod>NESTED_LOOP_JOIN</joinmethod>
+		<missingdatavalue>ATTRIBUTE_DEDUCTION</missingdatavalue>
+	</LinkageConfig>
+
+	
+	<DatabaseMap>
+		
+		<MappedPair attr="SSN" algorithm="EQUAL_FIELDS_BOOLEAN_DISTANCE" weight="0.3">
+			<read_col>SSN</read_col>
+			<write_col>SSN</write_col>
+		</MappedPair>
+		<MappedPair attr="LastName" algorithm="EDIT_DISTANCE" weight="0.3">
+			<read_col>ln</read_col>
+			<write_col>ln</write_col>
+		</MappedPair>
+		<MappedPair attr="FirstName" algorithm="EDIT_DISTANCE" weight="0.4">
+			<read_col>fn</read_col>
+			<write_col>fn</write_col>
+		</MappedPair>
+		
+	</DatabaseMap>
+	
+	<BackupDatabaseMap>
+		<BackupMappedPair attr="address" algorithm="ADDRESS_DISTANCE" weight="0.3">
+			<read_col>addr</read_col>
+			<write_col>addr</write_col>
+		</BackupMappedPair>
+
+		<BackupMappedPair attr="birthday" algorithm="DATE_DISTANCE" weight="0.3">
+			<read_col>bdate</read_col>
+			<write_col>bdate</write_col>
+		</BackupMappedPair>
+		<BackupMappedPair attr="email" algorithm="EDIT_DISTANCE" weight="0.3">
+			<read_col>email</read_col>
+			<write_col>email</write_col>
+		</BackupMappedPair>
+
+	</BackupDatabaseMap>
+
+	<Linking>
+		<left_pk>ssn_pk</left_pk>
+		<right_pk>ssn_pk</right_pk>
+	</Linking>
+	
+</linkage_config>
