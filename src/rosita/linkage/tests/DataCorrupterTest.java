@@ -1,6 +1,11 @@
 package rosita.linkage.tests;
 
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import rosita.linkage.main;
@@ -40,15 +45,15 @@ public class DataCorrupterTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String tblSourceTable ="tz.sourcebi_100K";
+		String tblSourceTable ="tz.sourceb5K_15";
 		
 		//Connect to the database
 		
 //		DatabaseConnection dbcRead = new DatabaseConnection("jdbc:mysql://140.226.182.109:3306/", main.mysqlDriver, "pprl", "ongt", "toor3");
 //		DatabaseConnection dbcWrite = new DatabaseConnection("jdbc:mysql://140.226.182.109:3306/", main.mysqlDriver, "pprl", "ongt", "toor3");
 
-		DatabaseConnection dbcRead = new DatabaseConnection("jdbc:postgresql://localhost:5432/", main.mysqlDriver, "rosita", "rosita", "rosita@2012");
-		DatabaseConnection dbcWrite = new DatabaseConnection("jdbc:postgresql://localhost:5432/", main.mysqlDriver, "rosita", "rosita", "rosita@2012");
+		DatabaseConnection dbcRead = new DatabaseConnection("jdbc:postgresql://localhost:5431/", main.mysqlDriver, "postgres", "postgres", "postgres");
+		DatabaseConnection dbcWrite = new DatabaseConnection("jdbc:postgresql://localhost:5431/", main.mysqlDriver, "postgres", "postgres", "postgres");
 		ResultSet sqlResults = dbcRead.getTableQuery("SELECT * FROM "+tblSourceTable);
 		
 		int intCount= 0;
@@ -62,7 +67,7 @@ public class DataCorrupterTest {
 			
 			for(int i=0;i<dataRow[0].length;i++){
 				if(dataRow[0][i]!=null){
-					if(dataRow[0][i].equals("x_demographic_id")){
+					if(dataRow[0][i].equals("id")){
 						strSnn_pk = dataRow[1][i];
 						if(strSnn_pk.equals("7162")){
 							int jj = 0 ;
@@ -71,26 +76,32 @@ public class DataCorrupterTest {
 					}
 				}
 			}
-			for(int i=1;i<dataRow[0].length-8;i++){
+			for(int i=0;i<dataRow[0].length-8;i++){
 
 				String strValue = "";
 				int intType = 0;
-				int intProp = 5;
+				int intProp = 15;
 				Boolean shouldbeCorrupted = false;
 				
-				if(dataRow[0][i].equals("first") || dataRow[0][i].equals("last") || dataRow[0][i].equals("city") || dataRow[0][i].equals("county") || dataRow[0][i].equals("address_1")){
+				if(dataRow[0][i].equals("first") || dataRow[0][i].equals("last") || dataRow[0][i].equals("city") || dataRow[0][i].equals("county") || dataRow[0][i].equals("street")||dataRow[0][i].equals("email")){
 					shouldbeCorrupted = true;
-				}else if(dataRow[0][i].equals("zip") || dataRow[0][i].equals("phone") || dataRow[0][i].equals("bdate") || dataRow[0][i].equals("acct") || dataRow[0][i].equals("sec")  || dataRow[0][i].equals("expr_date")){
+				}else if(dataRow[0][i].equals("zip") || dataRow[0][i].equals("ssn") ||dataRow[0][i].equals("phone") ||  dataRow[0][i].equals("acct") || dataRow[0][i].equals("sec")  || dataRow[0][i].equals("expr_date")){
 					intType = 1;
 					shouldbeCorrupted = true;
 				}else if(dataRow[0][i].equals("mi") || dataRow[0][i].equals("country") || dataRow[0][i].equals("card")){
 					intType = 3;
-					intProp = 5;
+					//intProp = 5;
 					shouldbeCorrupted = true;
 				}else if(dataRow[0][i].equals("sex")){
 					intType = 2;
-					intProp = 5;
+					//intProp = 5;
 					shouldbeCorrupted = true;
+				}else if(dataRow[0][i].equals("bdate")){
+					intType = 4;
+					//intProp = 5;
+					shouldbeCorrupted = true;
+				}else if(dataRow[0][i].equals("id")){
+					shouldbeCorrupted = false;
 				}
 				
 				if(shouldbeCorrupted==true){
@@ -108,7 +119,7 @@ public class DataCorrupterTest {
 			
 			strUpdateCmd = strUpdateCmd.substring(0, strUpdateCmd.length()-1);
 			
-			strUpdateCmd += " WHERE x_demographic_id='"+strSnn_pk+"';";
+			strUpdateCmd += " WHERE id='"+strSnn_pk+"';";
 			
 			if(intCount<1000){
 				intCount++;
@@ -128,7 +139,7 @@ public class DataCorrupterTest {
 	static String validateString(String parStr){
 		String result = parStr;
 		
-		result = result.replace("'", "''");
+		result = result.replace("'", "''").trim();
 		
 		return result;
 	}
@@ -163,6 +174,23 @@ public class DataCorrupterTest {
 				result.strCorruptedString = corrupter.createGenderError(parStr);
 			}else if(intType ==3){
 				result.strCorruptedString = corrupter.createTypoSubstituteError(parStr);
+			}else if(intType ==4){
+				
+				boolean isCorrectDate = false;
+				
+				while(!isCorrectDate){
+					result.strCorruptedString = corrupter.createNumberError(parStr);
+					try {
+						DateFormat testDate = new SimpleDateFormat("yyyy-MM-dd");
+						testDate.setLenient(false);
+						testDate.parse(result.strCorruptedString);
+						//testDate.parse("1999-36-13");
+						isCorrectDate = true;
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						//e.printStackTrace();
+					}
+				}
 			}
 		}
 		

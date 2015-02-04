@@ -493,6 +493,7 @@ public class S_WeightedJoinCondition extends AbstractJoinCondition {
 					}
 				}
 				
+				//Equation #2
 				if(TotalMissingWeight>TotalNoMissinggWeight){
 					value = 0;
 				}

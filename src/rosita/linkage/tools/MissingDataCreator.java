@@ -14,18 +14,28 @@ public class MissingDataCreator {
 	public MissingDataCreator(){
 		
 	}
+	
+	static String validateString(String parStr){
+		String result = parStr;
+		
+		result = result.replace("'", "''").trim();
+		
+		return result;
+	}
+	
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
 		Random rand = new Random();
-		String tblSourceTable ="TblSourceB_3000i_missing";
+		String tblSourceTable ="tz.sourceb5K_15_missing";
 		
 		//Connect to the database
 		
-		DatabaseConnection dbcRead = new DatabaseConnection("jdbc:mysql://140.226.132.40:3306/", main.mysqlDriver, "pprl", "ongt", "toor3");
-		DatabaseConnection dbcWrite = new DatabaseConnection("jdbc:mysql://140.226.132.40:3306/", main.mysqlDriver, "pprl", "ongt", "toor3");
+		DatabaseConnection dbcRead = new DatabaseConnection("jdbc:postgresql://localhost:5431/", main.mysqlDriver, "postgres", "postgres", "postgres");
+		DatabaseConnection dbcWrite = new DatabaseConnection("jdbc:postgresql://localhost:5431/", main.mysqlDriver, "postgres", "postgres", "postgres");
 
 		ResultSet sqlResults = dbcRead.getTableQuery("SELECT * FROM "+tblSourceTable);
 
@@ -35,28 +45,29 @@ public class MissingDataCreator {
 			String strUpdateCmd = "UPDATE "+tblSourceTable+" SET ";
 			String strSnn_pk="";
 			
-			for(int i=0;i<dataRow[0].length;i++){
-				if(dataRow[0][i].equals("ssn_pk")){
+			for(int i=0;i<9;i++){
+				if(dataRow[0][i].equals("id")){
 					strSnn_pk = dataRow[1][i];
 				}
 			}
-			for(int i=1;i<dataRow[0].length-1;i++){
-				
-				int rndNum = rand.nextInt(100);
-				
-				String strValue = "";
-				if(rndNum<10){
-					strValue = "NULL ";
-				}else{
-					strValue = "'"+dataRow[1][i]+"'";
+			for(int i=0;i<9;i++){
+				if(!dataRow[0][i].equals("id")){
+					int rndNum = rand.nextInt(100);
+					
+					String strValue = "";
+					if(rndNum<15){
+						strValue = "NULL ";
+					}else{
+						strValue = "'"+validateString(dataRow[1][i])+"'";
+					}
+					
+					strUpdateCmd += dataRow[0][i]+"="+strValue+",";
 				}
-				
-				strUpdateCmd += dataRow[0][i]+"="+strValue+",";
 			}
 			
 			strUpdateCmd = strUpdateCmd.substring(0, strUpdateCmd.length()-1);
 			
-			strUpdateCmd += " WHERE ssn_pk='"+strSnn_pk+"'";
+			strUpdateCmd += " WHERE id='"+strSnn_pk+"'";
 			dbcWrite.executeQuery(strUpdateCmd);
 		}
 	}

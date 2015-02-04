@@ -84,12 +84,14 @@ public class IRGenerator {
 			
 			
 			strFieldListA += mappedPairs.get(i).getColA().trim() + ",";
-			str01FieldListA += "IF("+mappedPairs.get(i).getColA().trim() + " IS NULL,'0','1'),";
+			//str01FieldListA += "IF("+mappedPairs.get(i).getColA().trim() + " IS NULL,'0','1'),";
+			str01FieldListA += "CASE WHEN "+mappedPairs.get(i).getColA().trim() + " IS NULL THEN '0' ELSE '1' END,";
 			strWhereNOTNULLListA += mappedPairs.get(i).getColA().trim() + " Is not null AND ";
 			strWhereNULLListA += mappedPairs.get(i).getColA().trim() + " Is null OR ";
 			
 			strFieldListB += mappedPairs.get(i).getColB().trim() + ",";
-			str01FieldListB += "IF("+mappedPairs.get(i).getColB().trim() + " IS NULL,'0','1'),";
+			//str01FieldListB += "IF("+mappedPairs.get(i).getColB().trim() + " IS NULL,'0','1'),";
+			str01FieldListB += "CASE WHEN "+mappedPairs.get(i).getColB().trim() + " IS NULL THEN '0' ELSE '1' END,";
 			strWhereNOTNULLListB += mappedPairs.get(i).getColB().trim() + " Is not null AND ";
 			strWhereNULLListB += mappedPairs.get(i).getColB().trim() + " Is null OR ";
 			
@@ -122,10 +124,10 @@ public class IRGenerator {
 		// Setup empty rules
 		//=================================================================================
 		
-		strCmd = "SELECT "+str01FieldListA+" FROM "+xml_reader.getTableName(xml_reader.SOURCEA)+" WHERE "+strWhereNULLListA+" GROUP BY "+str01FieldListA;
-		ResultSet sourceARowsMissing =  dbConnA.getTableQuery("SELECT "+str01FieldListA+" FROM "+xml_reader.getTableName(xml_reader.SOURCEA)+" WHERE "+strWhereNULLListA+" GROUP BY "+str01FieldListA);
-		strCmd = "SELECT "+str01FieldListB+" FROM "+xml_reader.getTableName(xml_reader.SOURCEB)+" WHERE "+strWhereNULLListB+" GROUP BY "+str01FieldListB;
-		ResultSet sourceBRowsMissing =  dbConnB.getTableQuery("SELECT "+str01FieldListB+" FROM "+xml_reader.getTableName(xml_reader.SOURCEB)+" WHERE "+strWhereNULLListB+" GROUP BY "+str01FieldListB);
+		strCmd = "SELECT "+str01FieldListA+" FROM "+xml_reader.getSchema(xml_reader.SOURCEA)+"."+xml_reader.getTableName(xml_reader.SOURCEA)+" WHERE "+strWhereNULLListA+" GROUP BY "+str01FieldListA;
+		ResultSet sourceARowsMissing =  dbConnA.getTableQuery("SELECT "+str01FieldListA+" FROM "+xml_reader.getSchema(xml_reader.SOURCEA)+"."+xml_reader.getTableName(xml_reader.SOURCEA)+" WHERE "+strWhereNULLListA+" GROUP BY "+str01FieldListA);
+		strCmd = "SELECT "+str01FieldListB+" FROM "+xml_reader.getSchema(xml_reader.SOURCEB)+"."+xml_reader.getTableName(xml_reader.SOURCEB)+" WHERE "+strWhereNULLListB+" GROUP BY "+str01FieldListB;
+		ResultSet sourceBRowsMissing =  dbConnB.getTableQuery("SELECT "+str01FieldListB+" FROM "+xml_reader.getSchema(xml_reader.SOURCEB)+"."+xml_reader.getTableName(xml_reader.SOURCEB)+" WHERE "+strWhereNULLListB+" GROUP BY "+str01FieldListB);
 
 		while ((dataRowA = dbConnA.getNextResultWithColName(sourceARowsMissing)) != null) {
 			sourceADataMissing.add(dataRowA);

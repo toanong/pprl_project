@@ -38,7 +38,7 @@ public class FRILLinkageTest {
 
 	public static void main(String[] args) 
 	{
-		FRILLinker myFRILLinker = new FRILLinker("cfg/TestLink_2.xml");
+		FRILLinker myFRILLinker = new FRILLinker("cfg/Test_10_05_BCKP_OPTI.xml");
 		myFRILLinker.link();
 	}
 }

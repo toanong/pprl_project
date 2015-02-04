@@ -127,8 +127,8 @@ public class CICGenerator {
 		DatabaseConnection dbcA = xml_reader.getDatabaseConnection(xml_reader.SOURCEA);
 		DatabaseConnection dbcB = xml_reader.getDatabaseConnection(xml_reader.SOURCEB);
 		
-		ResultSet sourceARows =  dbcA.getTableQuery("SELECT "+strFieldListA+" FROM "+xml_reader.getTableName(xml_reader.SOURCEA)+" WHERE "+strWhereNULLListA);
-		ResultSet sourceBRows =  dbcB.getTableQuery("SELECT "+strFieldListB+" FROM "+xml_reader.getTableName(xml_reader.SOURCEB)+" WHERE "+strWhereNULLListB);
+		ResultSet sourceARows =  dbcA.getTableQuery("SELECT "+strFieldListA+" FROM "+xml_reader.getSchema(xml_reader.SOURCEA)+"."+xml_reader.getTableName(xml_reader.SOURCEA)+" WHERE "+strWhereNULLListA);
+		ResultSet sourceBRows =  dbcB.getTableQuery("SELECT "+strFieldListB+" FROM "+xml_reader.getSchema(xml_reader.SOURCEB)+"."+xml_reader.getTableName(xml_reader.SOURCEB)+" WHERE "+strWhereNULLListB);
 		
 		
 		CICControl myCICControl = new CICControl(null, sourceARows, dbcA, mappedPairs, mappedPairs_backup);
