@@ -39,12 +39,19 @@
 
 	
 	<DatabaseMap>
-		
-		<MappedPair attr="DOB" algorithm="DATE_DISTANCE" weight="0.2">
-			<read_col>bdate</read_col>
-			<write_col>bdate</write_col>
-		</MappedPair>
 
+	<MappedPair attr="DOB" algorithm="EDIT_DISTANCE" weight="0.2">
+			<read_col>s_dob</read_col>
+			<write_col>s_dob</write_col>
+		</MappedPair>
+	<MappedPair attr="MOB" algorithm="EDIT_DISTANCE" weight="0.2">
+			<read_col>s_mob</read_col>
+			<write_col>s_mob</write_col>
+		</MappedPair>
+	<MappedPair attr="YOB" algorithm="EDIT_DISTANCE" weight="0.2">
+			<read_col>s_yob</read_col>
+			<write_col>s_yob</write_col>
+		</MappedPair>
 		<MappedPair attr="sex" algorithm="EDIT_DISTANCE" weight="0.2">
 			<read_col>sex</read_col>
 			<write_col>sex</write_col>
