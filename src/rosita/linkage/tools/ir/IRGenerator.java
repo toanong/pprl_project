@@ -55,7 +55,7 @@ public class IRGenerator {
 	
 	private SamplingMethod sample;
 	
-	private double LocalThreshold = 0.8;
+	private double LocalThreshold = 0.9;
 	
 	private double TotalDataWeights;
 	private double TotalMissingWeights;
@@ -218,7 +218,7 @@ public class IRGenerator {
 			
 			for (int t=0;t<ImputationRuleSet.size();t++){
 				if(ImputationRuleSet.get(t).ImputedValue==-1){
-					if((double)ImputationRuleSet.get(t).intUp/ImputationRuleSet.get(t).intDown>0.8){
+					if((double)ImputationRuleSet.get(t).intUp/ImputationRuleSet.get(t).intDown>0.80){
 						ImputationRuleSet.get(t).ImputedValue = 100;
 					}else{
 						ImputationRuleSet.get(t).ImputedValue = 0;

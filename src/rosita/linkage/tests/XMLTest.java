@@ -25,7 +25,7 @@ public class XMLTest
 				xmlr.getMappedPairs(), xmlr.getBlockingPair());
 
 		DatabaseEncryptor de = 
-			new DatabaseEncryptor(readDBC, writeDBC, mapConfig);
+			new DatabaseEncryptor(readDBC, writeDBC, mapConfig, xmlr.getDBMS());
 
 		de.setMaxCount(10);
 		de.setDoWrite(false);

@@ -402,6 +402,7 @@ public class XML_Reader
 
 		Node n = null;
 		String database = "";
+		String schema = "";
 		String url = "";
 		String user = "";
 		String password = "";
@@ -409,22 +410,44 @@ public class XML_Reader
 		// Only get the first item.  We don't really care if the user
 		// has defined more "DatbaseConnection" items in the XML file
 		n = nl.item(0);
-		if (n.getNodeType() == Node.ELEMENT_NODE)
-		{
-			Element e = (Element) n;
-			database = getTagValue("database", e);
-			url = getTagValue("url", e);
-			user = getTagValue("user", e);
-			password = getTagValue("password", e);				
-		}
-
-
-		//System.out.format("database:%s, table:%s, url:%s, user:%s, password:%s %n", database,
-		//		table, url, user, password);
-		try{
-			dbc = new DatabaseConnection(url, main.mysqlDriver, database, user, password);
-		}catch(Exception ex){
-			MyUtilities.end("Cannot create database connection. Recheck database connection parameters.");
+		
+		if(this.getDBMS().equals(DBMS.MySQL)){
+			if (n.getNodeType() == Node.ELEMENT_NODE)
+			{
+				Element e = (Element) n;
+				database = getTagValue("database", e);
+				url = getTagValue("url", e);
+				user = getTagValue("user", e);
+				password = getTagValue("password", e);				
+			}
+	
+	
+			//System.out.format("database:%s, table:%s, url:%s, user:%s, password:%s %n", database,
+			//		table, url, user, password);
+			try{
+				dbc = new DatabaseConnection(url, main.mysqlDriver, database, user, password);
+			}catch(Exception ex){
+				MyUtilities.end("Cannot create database connection. Recheck database connection parameters.");
+			}
+		}else{
+			if (n.getNodeType() == Node.ELEMENT_NODE)
+			{
+				Element e = (Element) n;
+				database = getTagValue("database", e);
+				schema = getTagValue("schema", e);
+				url = getTagValue("url", e);
+				user = getTagValue("user", e);
+				password = getTagValue("password", e);				
+			}
+	
+	
+			//System.out.format("database:%s, table:%s, url:%s, user:%s, password:%s %n", database,
+			//		table, url, user, password);
+			try{
+				dbc = new DatabaseConnection(url, main.mysqlDriver, database, schema, user, password);
+			}catch(Exception ex){
+				MyUtilities.end("Cannot create database connection. Recheck database connection parameters.");
+			}
 		}
 		return dbc;
 	}

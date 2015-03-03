@@ -11,6 +11,8 @@ import rosita.linkage.util.MappingConfig;
 import rosita.linkage.util.MyUtilities;
 import rosita.linkage.util.StopWatch;
 import rosita.linkage.RecordBlock;
+import rosita.linkage.analysis.DBMS;
+
 
 public class DatabaseEncryptor 
 {
@@ -36,6 +38,8 @@ public class DatabaseEncryptor
 
 	private String readTable;
 	private String writeTable;
+	
+	private DBMS myDBMS;
 
 	private List<E_Record> e_records = null;
 	private int readRecordCount;
@@ -53,11 +57,11 @@ public class DatabaseEncryptor
 	 * @param mapConfig - A properly initialized mapping configuration object.
 	 */
 	public DatabaseEncryptor(DatabaseConnection readDBC, DatabaseConnection writeDBC,
-			MappingConfig mapConfig)
+			MappingConfig mapConfig, DBMS parDBMS)
 	{
 		this.readDBC = readDBC;
 		this.writeDBC = writeDBC;
-		
+		this.myDBMS = parDBMS;
 		// Grab as much as we can from mapConfig right now
 		this.readTable = mapConfig.getTable(MappingConfig.SOURCE_A);
 		this.writeTable = mapConfig.getTable(MappingConfig.SOURCE_B);
@@ -74,18 +78,34 @@ public class DatabaseEncryptor
 			System.out.println("Database Reader & Writer Setup...");
 			timer.start();
 		}
-
-		// Ensure table existence
-		if (! readDBC.checkTableExists(readTable) ) 
-			MyUtilities.end("Error: table " + readTable + " does not exist!\n" +
-			"Program Terminated.");			
 		
-		if (! writeDBC.checkTableExists(writeTable) ) 
-			MyUtilities.end("Error: table " + writeTable + " does not exist!\n" +
-			"Program Terminated.");			
+		if(myDBMS.equals(DBMS.MySQL)){
 
-		// Get the number of rows in the the readTable
-		readRecordCount = readDBC.getRowCount(readTable);		
+			// Ensure table existence
+			if (! readDBC.checkTableExists(readTable) ) 
+				MyUtilities.end("Error: table " + readTable + " does not exist!\n" +
+				"Program Terminated.");			
+			
+			if (! writeDBC.checkTableExists(writeTable) ) 
+				MyUtilities.end("Error: table " + writeTable + " does not exist!\n" +
+				"Program Terminated.");			
+			
+			// Get the number of rows in the the readTable
+			readRecordCount = readDBC.getRowCount(readTable);		
+		}else if(myDBMS.equals(DBMS.PostgreSQL)){
+			// Ensure table existence
+			if (! readDBC.checkPostgreTableExists(readTable, readDBC.getSchema()) ) 
+				MyUtilities.end("Error: table " + readTable + " does not exist!\n" +
+				"Program Terminated.");			
+			
+			if (! writeDBC.checkPostgreTableExists(writeTable, writeDBC.getSchema()) ) 
+				MyUtilities.end("Error: table " + writeTable + " does not exist!\n" +
+				"Program Terminated.");		
+			
+			// Get the number of rows in the the readTable
+			readRecordCount = readDBC.getRowCount(readDBC.getSchema()+"."+readTable);	
+		}
+			
 		
 		// Attach the mapConfig object to Record.
 		E_Record.setup(mapConfig, numFilters);
@@ -115,7 +135,7 @@ public class DatabaseEncryptor
 		}
 
 		// TODO: Doing a select * will eat up memory. (Do it in blocks?)
-		ResultSet sqlResults = readDBC.getTableQuery("SELECT * FROM " + readTable);
+		ResultSet sqlResults = readDBC.getTableQuery("SELECT * FROM " + (myDBMS.equals(DBMS.PostgreSQL)?readDBC.getSchema()+".":"")+readTable);
 
 		// Try to read in Record data from database
 		String[] dataRow; String[] encryptionTypes; int count = 0;
@@ -196,11 +216,15 @@ public class DatabaseEncryptor
 			
 			// Prepare a query with this block's records.
 			StringBuilder query = new StringBuilder();
-			query.append("INSERT INTO " + writeTable + " (");
+			query.append("INSERT INTO " + (myDBMS.equals(DBMS.PostgreSQL)?writeDBC.getSchema()+".":"")+ writeTable + " (");
 			query.append(mapConfig.getColumnNamesCSV(MappingConfig.SOURCE_B) );
 			query.append("," + mapConfig.getBlockingColumnName(MappingConfig.SOURCE_B) + ")\n");
 			query.append("VALUES\n");
-			query.append(block.getRecordsAsMySQLTuples());
+			if(myDBMS.equals(DBMS.MySQL)){
+				query.append(block.getRecordsAsMySQLTuples());
+			}else if (myDBMS.equals(DBMS.PostgreSQL)){
+				query.append(block.getRecordsAsPostgresTuples());
+			}
 					
 			if (DO_WRITE)
 				writeDBC.executeQuery(query.toString());

@@ -50,7 +50,7 @@ public class ImputationRuleGenerator {
 	private ArrayList<MappedPair> mappedPairs;
 	private XML_Reader xml_reader;
 	
-	private double LocalThreshold = 80;
+	private double LocalThreshold = 100;
 	
 	private double TotalDataWeights;
 	private double TotalMissingWeights;
@@ -230,6 +230,10 @@ public class ImputationRuleGenerator {
 					DataCell dtaCellA = new DataCell(DataColumnDefinition.TYPE_STRING, sourceADataFull.get(i1)[1][k]);
 					DataCell dtaCellB = new DataCell(DataColumnDefinition.TYPE_STRING, sourceBDataFull.get(i2)[1][k]);
 					
+					if (dtaCellA.getValue().toString().equals("1992-02-05")&&dtaCellB.getValue().toString().equals("1992-04-03")){
+						int hhhh= 0;
+						hhhh++;
+					}
 					ImputationRule  tempRule= new ImputationRule();
 
 					if(distances[k].distance(dtaCellA, dtaCellB) > LocalThreshold){
@@ -269,7 +273,7 @@ public class ImputationRuleGenerator {
 		
 		for (int t=0;t<ImputationRuleSet.size();t++){
 			if(ImputationRuleSet.get(t).ImputedValue==-1){
-				if((double)ImputationRuleSet.get(t).intUp/ImputationRuleSet.get(t).intDown>0.8){
+				if((double)ImputationRuleSet.get(t).intUp/ImputationRuleSet.get(t).intDown>0.99){
 					ImputationRuleSet.get(t).ImputedValue = 100;
 				}else{
 					ImputationRuleSet.get(t).ImputedValue = 0;

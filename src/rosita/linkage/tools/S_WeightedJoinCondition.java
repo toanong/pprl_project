@@ -34,6 +34,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import rosita.linkage.FRILLinker;
+import rosita.linkage.filtering.BloomFilter;
 
 import com.mysql.jdbc.RowData;
 
@@ -419,6 +420,7 @@ public class S_WeightedJoinCondition extends AbstractJoinCondition {
 			o++;			
 		}
 
+		//encryptionFilter = new BloomFilter<String>(defaultBitSetSize, defaultExpectedNumberOfElements);
 		
 		for (int i = 0;i < rowACols.length; i++){
 			DataCell tempCellA = rowA.getData(rowACols[i]);

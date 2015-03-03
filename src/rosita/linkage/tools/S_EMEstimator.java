@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import rosita.linkage.analysis.PPRLDistance;
 import cdc.components.AbstractJoinCondition;
 import cdc.datamodel.DataCell;
 import cdc.datamodel.DataRow;
@@ -47,6 +48,7 @@ public class S_EMEstimator {
 			u[i] = DEFAULT_U_i;
 		}
 		EqualFieldsDistance dst = new EqualFieldsDistance();
+		PPRLDistance pprld = new PPRLDistance(); 
 		List comparisons = new ArrayList();
 		for (int n = 0; n < rowsA.length; n++) {
 			DataRow[] r1 = rowsA[n];
@@ -58,7 +60,13 @@ public class S_EMEstimator {
 					for (int k = 0; k < cond.getLeftJoinColumns().length; k++) {
 						DataCell cellA = r1[i].getData(cond.getLeftJoinColumns()[k]);
 						DataCell cellB = r2[j].getData(cond.getRightJoinColumns()[k]);
-						b[k] = dst.distanceSatisfied(cellA, cellB);
+						if(this.condition.getDistanceFunctions()[k].getClass().equals(PPRLDistance.class)){
+							b[k] = pprld.distanceSatisfied(cellA, cellB); 
+						}	
+						else
+						{
+							b[k] = dst.distanceSatisfied(cellA, cellB);
+						}
 						comparisons.add(b);
 					}
 				}
@@ -89,13 +97,20 @@ public class S_EMEstimator {
 		}
 		boolean[][] input = new boolean[rowsA.length * rowsB.length][cond.getLeftJoinColumns().length];
 		EqualFieldsDistance dst = new EqualFieldsDistance();
+		PPRLDistance pprld = new PPRLDistance(); 
 		for (int i = 0; i < rowsA.length; i++) {
 			for (int j = 0; j < rowsB.length; j++) {
 				if (cancel) return null;
 				for (int k = 0; k < cond.getLeftJoinColumns().length; k++) {
 					DataCell cellA = rowsA[i].getData(cond.getLeftJoinColumns()[k]);
 					DataCell cellB = rowsB[j].getData(cond.getRightJoinColumns()[k]);
-					input[rowsB.length * i + j][k] = dst.distanceSatisfied(cellA, cellB);
+					if(this.condition.getDistanceFunctions()[k].equals(PPRLDistance.class)){
+						input[rowsB.length * i + j][k] = pprld.distanceSatisfied(cellA, cellB);
+					}	
+					else
+					{
+						input[rowsB.length * i + j][k] = dst.distanceSatisfied(cellA, cellB);
+					}
 				}
 			}
 		}

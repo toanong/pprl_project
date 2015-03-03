@@ -101,6 +101,29 @@ public class RecordBlock
 		
 		return s.toString();
 	}
+	
+	/**
+	 * Build a string composed of all the records ready for the VALUES
+	 * section of a Postgres insert statement
+	 * @return - A string of all the records in (attr1, attr2, attr3, ... ),\n format
+	 */
+	public String getRecordsAsPostgresTuples()
+	{
+		StringBuilder s = new StringBuilder();
+		E_Record r;
+		while (recordBlock.size() != 0)
+		{
+			r = recordBlock.remove(0);
+			s.append( "(" + r.toSingleQuotedString() + ")" );
+
+			if (recordBlock.size() == 0)
+				s.append("\n");
+			else 
+				s.append(",\n");
+		}
+		
+		return s.toString();
+	}
 
 	/**
 	 * Getter for the total number of records procesed by this block

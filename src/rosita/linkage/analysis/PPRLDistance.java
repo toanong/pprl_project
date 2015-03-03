@@ -91,4 +91,11 @@ public class PPRLDistance extends AbstractDistance{
 		
 		return distance(s1, s2);
 	}
+	
+	public boolean distanceSatisfied(DataCell cellA, DataCell cellB){
+		String s1 = cellA.getValue().toString();
+		String s2 = cellB.getValue().toString();
+		
+		return distance(s1, s2)>90;
+	}
 }

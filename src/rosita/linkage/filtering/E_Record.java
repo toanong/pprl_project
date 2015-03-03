@@ -167,8 +167,9 @@ public class E_Record
 
 		// First, Create the DOBHASH
 		String s = blockingValue;
-		if (!s.equals(""))
-			s = s.substring(0, 4);
+		if (!s.equals("")){
+			s = s.substring(0, s.length()>3?4:s.length());
+		}
 		blockingValue = MyUtilities.SHA1(s);
 
 		// Encrypt all of this record's values.
@@ -229,6 +230,23 @@ public class E_Record
 
 		}
 		sb.append("\"" + blockingValue + "\"");
+		return sb.toString();
+	}
+	
+	public String toSingleQuotedString()
+	{
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < writeOrder.size(); i++)
+		{
+			int index = writeOrder.get(i);
+			if(values[index]==null || values[index].length()==0)
+				sb.append(values[index] + ",");
+			else
+				sb.append("'" + values[index] + "',");
+
+		}
+		sb.append("'" + blockingValue + "'");
 		return sb.toString();
 	}
 
@@ -321,9 +339,10 @@ public class E_Record
 		for (int i = 0; i < numFilters; i++)
 			threadedEncryptionFilters.add(new BloomFilter<String>(defaultBitSetSize, defaultExpectedNumberOfElements));
 
-		// Set up the 
-		encryptionFilter.clear();
-		E_Record.encryptedNullValue = encryptionFilter.toString();
+		// Set up the
+		// Note: make it null just for experimental purpose
+		//encryptionFilter.clear();
+		//E_Record.encryptedNullValue = encryptionFilter.toString();
 
 		isFilterSetup = true;
 	}

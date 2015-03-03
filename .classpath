@@ -15,8 +15,8 @@
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.13-bin.jar"/>
 	<classpathentry kind="lib" path="lib/shared-bouncycastle-reduced-0.9.11.jar"/>
 	<classpathentry kind="lib" path="lib/simmetrics_jar_v1_6_2_d07_02_07.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Toan/Documents/workspace/pprl_project/lib/join.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Toan/Documents/workspace/pprl_project/lib/opencsv-2.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Toan/Documents/workspace/pprl_project/lib/postgresql-9.2-1002.jdbc4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Toan/workspace/client_project/lib/join.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Toan/workspace/client_project/lib/opencsv-2.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Toan/workspace/client_project/lib/postgresql-9.2-1002.jdbc4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -23,6 +23,7 @@ public class DatabaseConnection
 	private Statement stmt;
 
 	private String database;
+	private String schema;
 	private String URL;
 	private String user;
 	private String passwd;
@@ -34,6 +35,34 @@ public class DatabaseConnection
 	 * @param user - The username to use to connect to the db
 	 * @param passwd - The password to use to connect to the db.
 	 */
+	public DatabaseConnection(String URL, String driver, String database, String schema, String user, String passwd)
+	{
+		// TODO: remove driver from function parameters, just put it in main.java
+		try
+		{
+			// Keep track of the essentials for ToSTring()
+			this.database = database;
+			this.schema = schema;
+			this.URL = URL;
+			this.user = user;
+			this.passwd = passwd;
+			
+			// Modify dateTime behavior to avoid exception during read.
+			URL += database + "?zeroDateTimeBehavior=convertToNull";
+
+			// Establish Connection
+			conn = DriverManager.getConnection(URL, user, passwd);  
+
+			// Ready an SQL statement
+			stmt = conn.createStatement();
+			
+		} catch (SQLException e) {
+			System.err.println("Error Connecting to Database"); 
+			e.printStackTrace();
+			System.err.println("Program terminated with exit status 1");
+		} 
+	}
+	
 	public DatabaseConnection(String URL, String driver, String database, String user, String passwd)
 	{
 		// TODO: remove driver from function parameters, just put it in main.java
@@ -567,6 +596,9 @@ public class DatabaseConnection
 		// Also destroy reference to the SQL statement
 		if ( stmt != null)
 			stmt = null;
+	}
+	public String getSchema(){
+		return this.schema;
 	}
 	
 	public String toString()
