@@ -34,6 +34,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import rosita.linkage.FRILLinker;
+import rosita.linkage.analysis.PPRLDistance;
 import rosita.linkage.filtering.BloomFilter;
 
 import com.mysql.jdbc.RowData;
@@ -415,7 +416,8 @@ public class S_WeightedJoinCondition extends AbstractJoinCondition {
 		//Look for fields with missing data
 		//find column with missing value
 		
-		if(rowA.getData(rowACols[0]).getValue().equals("002-05-9624") && rowB.getData(rowBCols[0]).getValue().equals("002-05-9624")){
+		//if(rowA.getData(rowACols[6]).getValue().toString().trim().startsWith("01110111110100001101111000011110100001110111000010101100000011101111100110101110000011111101010011111") && rowB.getData(rowBCols[6]).getValue().toString().trim().startsWith("11110110100101001101111000001110100111110101000110111110011011101111101010111100101111111111000111101")){
+		if(rowA.getData(rowACols[5]).getValue().toString().trim().toUpperCase().contains("DESTINEE") && rowB.getData(rowBCols[5]).getValue().toString().trim().toUpperCase().contains("DESTINY")){
 			int o= 1;
 			o++;			
 		}
@@ -534,7 +536,14 @@ public class S_WeightedJoinCondition extends AbstractJoinCondition {
 					
 					if(!missingFieldList.contains(i)){
 						double tempDistance =distances[i].distance(cellA, cellB);
-						if(tempDistance<80){
+						double localThreshold = 80;
+						
+						//PPRL distance is more permissive
+						if (distances[i].getClass().equals(PPRLDistance.class)){
+							localThreshold = 85;
+						}
+						
+						if(tempDistance<localThreshold){
 							isImputationQualified = false;
 						}
 						value += tempDistance * weights[i];
