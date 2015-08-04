@@ -31,7 +31,7 @@
 	</DatabaseSaver>
 
 	<LinkageConfig>
-		<acceptancelevel>95</acceptancelevel>
+		<acceptancelevel>85</acceptancelevel>
 		<weightidenfifier>EM</weightidenfifier>
 		<joinmethod>NESTED_LOOP_JOIN</joinmethod>
 		<missingdatavalue>ATTRIBUTE_DEDUCTION</missingdatavalue>

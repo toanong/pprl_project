@@ -38,7 +38,7 @@ public class FRILLinkageTest {
 
 	public static void main(String[] args) 
 	{
-		FRILLinker myFRILLinker = new FRILLinker("cfg/Test1_ATT_DECT_encrypted.xml");
+		FRILLinker myFRILLinker = new FRILLinker("cfg/Test1_FRIL_0_set_encrypted.xml");
 		myFRILLinker.link();
 	}
 }

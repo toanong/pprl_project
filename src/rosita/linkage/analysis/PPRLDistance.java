@@ -73,6 +73,8 @@ public class PPRLDistance extends AbstractDistance{
 		result = 2.0 * (double) hitsSimilar;
 		result /= (double)(hitsRecord + hitsLinkedRecord);
 		
+		if(result<0.94) return 0;
+		
 		//Convert the value to FRIL standard
 		result = result * 100;
 		

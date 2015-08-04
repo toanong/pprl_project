@@ -17,7 +17,8 @@ public class E_Record
 
 	// Set up members dealing with the encryption filters
 	private static BloomFilter<String> encryptionFilter = null;
-	private static final int defaultBitSetSize = 100;
+	private static final int defaultBitSetSize = 400;
+	//private static final int defaultExpectedNumberOfElements = 11;
 	private static final int defaultExpectedNumberOfElements = 11;
 	private static List<BloomFilter<String>> threadedEncryptionFilters = null;
 

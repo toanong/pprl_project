@@ -655,7 +655,7 @@ public class FRILLinker {
 		
 		if(xmlr.getWeightIdentifier()==WeightIdentifier.MANUAL){
 			if(ManualSumWeight!=1){
-				MyUtilities.end("The sum of manual weights must be equal to 1.");
+				//MyUtilities.end("The sum of manual weights must be equal to 1.");
 			}
 		}
 		

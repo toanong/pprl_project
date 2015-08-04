@@ -10,7 +10,7 @@ public class EncryptionTest
 {
 	public static void main(String args[])
 	{
-		XML_Reader xmlr = new XML_Reader("cfg/enc_conf_source1b.xml");
+		XML_Reader xmlr = new XML_Reader("cfg/enc_conf_source1b_set.xml");
 
 		if(xmlr.getDBMS().equals(DBMS.MySQL)){
 			DatabaseConnection readDBC = xmlr.getDatabaseConnection(XML_Reader.READER);

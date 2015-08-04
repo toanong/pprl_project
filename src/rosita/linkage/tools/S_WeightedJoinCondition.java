@@ -413,11 +413,16 @@ public class S_WeightedJoinCondition extends AbstractJoinCondition {
 		double TotalMissingWeight = 0;
 		double TotalNoMissinggWeight = 0;
 		
+		
+		double TotalNoMissingA = 0;
 		//Look for fields with missing data
 		//find column with missing value
 		
+//		if(rowA.getData(rowBCols[0]).getValue().toString().trim().startsWith("01110111110100001101111000011110100001110111000010101100000011101111100110101110000011111101010011111") && rowB.getData(rowBCols[6]).getValue().toString().trim().startsWith("11110110100101001101111000001110100111110101000110111110011011101111101010111100101111111111000111101")){
+		//if(rowA.getData(rowACols[5]).getValue().toString().trim().toUpperCase().contains("DESTINEE") && rowB.getData(rowBCols[5]).getValue().toString().trim().toUpperCase().contains("DESTINY")){
 		//if(rowA.getData(rowACols[6]).getValue().toString().trim().startsWith("01110111110100001101111000011110100001110111000010101100000011101111100110101110000011111101010011111") && rowB.getData(rowBCols[6]).getValue().toString().trim().startsWith("11110110100101001101111000001110100111110101000110111110011011101111101010111100101111111111000111101")){
-		if(rowA.getData(rowACols[5]).getValue().toString().trim().toUpperCase().contains("DESTINEE") && rowB.getData(rowBCols[5]).getValue().toString().trim().toUpperCase().contains("DESTINY")){
+		//if(rowB.getData(rowBCols[0]).getValue().toString().trim().startsWith("1001111111101111101110111001110111111110111111011111011011101011111011001111100111111111111011011011000010111001111111111111010111101010011011110011011011111101111111111101111010110110011111111111111110111101011111011011111101111111111111111110001111110111")){
+		if(rowA.getData()[4].getValue().toString().trim().equals("3344") && rowB.getData()[4].getValue().toString().trim().equals("2556")){
 			int o= 1;
 			o++;			
 		}
@@ -440,7 +445,12 @@ public class S_WeightedJoinCondition extends AbstractJoinCondition {
 				noMissingFieldList.add(i);
 				TotalNoMissinggWeight += weights[i];
 			}
+			
+			if(!tempCellA.isEmpty(rowACols[i])){
+				TotalNoMissingA += weights[i];
+			}
 		}
+		
 		
 		
 		if(missingFieldList.size()>0){
@@ -690,14 +700,27 @@ public class S_WeightedJoinCondition extends AbstractJoinCondition {
 					} else {
 						value += distances[i].distance(cellA, cellB) * weights[i];
 					}
+					
+					if (TotalNoMissingA == 0 && value>0){
+						int hhh = 0;
+						hhh++;
+					}
+					
+					if(value>100){
+						//int test = 0;
+						//test++;
+						value = 100;
+					}
+					
 					weightsToGo -= weights[i];
 					if (this.isCanUseOptimisticEval() && value + weightsToGo*100 < acceptanceThreshold) {
 						return new EvaluatedCondition(false, false, (int)value);
 					}
 				}
 				if(value>100){
-					int test = 0;
-					test++;
+					//int test = 0;
+					//test++;
+					value = 100;
 				}
 			}
 		}else{
@@ -708,6 +731,13 @@ public class S_WeightedJoinCondition extends AbstractJoinCondition {
 					value += emptyMatchScore[i] * 100 * weights[i];
 				} else {
 					value += distances[i].distance(cellA, cellB) * weights[i];
+				}
+				if(value>100){
+					//int test = 0;d
+					//test++;
+					value = 100;
+//					111110111111011111111111111111101110111011110111111111011111111101110111110011110111101011111110011111101111111011101111
+//					111010111011100101111011111110111111101111001110111011111111111111101011100001101111111111011110111111011111111111111010					
 				}
 				weightsToGo -= weights[i];
 				if (this.isCanUseOptimisticEval() && value + weightsToGo*100 < acceptanceThreshold) {

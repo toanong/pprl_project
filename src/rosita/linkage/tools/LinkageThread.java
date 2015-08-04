@@ -78,6 +78,11 @@ public class LinkageThread extends StoppableThread {
 			System.out.println("Start time: "+t1);
 			while ((row = system.getJoin().joinNext()) != null) {
 				n++;
+				if(row.getData()[0].getValue().toString().equals("3344") && row.getData()[1].getValue().toString().equals("2556")){
+					int k = 0;
+					k++;
+				}
+					
 				system.getResultSaver().saveRow(row);
 				SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
@@ -113,6 +118,7 @@ public class LinkageThread extends StoppableThread {
 			});
 			
 		} catch (RJException e) {
+			e.printStackTrace();
 			//JXErrorDialog.showDialog(MainFrame.main, "Error while joining data", e);
 			closeProgress();
 		} catch (IOException e) {
